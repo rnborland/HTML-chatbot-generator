@@ -1,1 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF-Insights Embed Snippet Generator</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121933;
+      --panel-2: #182144;
+      --text: #eef2ff;
+      --muted: #b7c0e0;
+      --accent: #77a7ff;
+      --border: #2a3566;
+      --user: #20326c;
+      --bot: #1a2140;
+      --ok: #8de1b5;
+      --warn: #ffd27a;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b1020 0%, #0d1328 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    h1, h2, h3 { margin: 0 0 12px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 18px; }
+    p { color: var(--muted); line-height: 1.45; }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    textarea { min-height: 110px; resize: vertical; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #06102f;
+      font-weight: 700;
+    }
+
+    button.secondary {
+      background: #273666;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--warn);
+      margin-top: 12px;
+    }
+
+    .snippet {
+      width: 100%;
+      min-height: 280px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre;
+    }
+
+    .preview-shell {
+      height: 680px;
+      background: #091125;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--ok);
+      min-height: 18px;
+    }
+
+    @media (max-width: 980px) {
+      .wrap { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>PDF-Insights Embed Generator</h1>
+      <p>Enter your settings and generate an embeddable HTML chatbot snippet that talks to your PDF-Insights.ai API-backed document assistant.</p>
+
+      <label for="apiBase">API Base URL</label>
+      <input id="apiBase" value="https://users.pdf-insights.ai" />
+
+      <label for="apiKey">PDF-Insights API Key</label>
+      <input id="apiKey" placeholder="pdi_live_..." />
+
+      <label for="pdfId">PDF ID</label>
+      <input id="pdfId" placeholder="Paste pdf_id here" />
+
+      <div class="row">
+        <div>
+          <label for="companyName">Company Name</label>
+          <input id="companyName" value="Your Company" />
+        </div>
+        <div>
+          <label for="widgetTitle">Chat Title</label>
+          <input id="widgetTitle" value="Ask Our Assistant" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="model">Model</label>
+          <select id="model">
+            <option value="gpt-4o-mini" selected>gpt-4o-mini</option>
+            <option value="gpt-4o">gpt-4o</option>
+          </select>
+        </div>
+        <div>
+          <label for="accent">Accent Color</label>
+          <input id="accent" value="#4f8cff" />
+        </div>
+      </div>
+
+      <label for="systemPrompt">Personality / System Prompt</label>
+      <textarea id="systemPrompt">You are a helpful assistant for the selected PDF. Base your answers on the uploaded document. If the document does not clearly support an answer, say so. Keep answers practical and concise.</textarea>
+
+      <div class="actions">
+        <button id="generateBtn">Generate Snippet</button>
+        <button id="previewBtn" class="secondary">Refresh Preview</button>
+        <button id="copyBtn" class="secondary">Copy Snippet</button>
+      </div>
+      <div class="status" id="status"></div>
+      <div class="hint">For a production website, do not expose a live API key in browser code. Use a small server-side proxy or temporary token flow.</div>
+    </div>
+
+    <div class="card">
+      <h2>Embeddable HTML Snippet</h2>
+      <textarea id="snippetBox" class="snippet"></textarea>
+      <h2 style="margin-top:18px;">Live Preview</h2>
+      <div class="preview-shell">
+        <iframe id="previewFrame" title="Chatbot Preview" style="width:100%;height:100%;border:0;"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function escJs(str) {
+      return String(str)
+        .replace(/\\/g, '\\\\')
+        .replace(/`/g, '\\`')
+        .replace(/\$\{/g, '\\${');
+    }
+
+    function buildSnippet(cfg) {
+      return `<!-- PDF-Insights.ai Embeddable Chat Widget -->
+<div id="pdf-insights-chat-root"></div>
+<script>
+(function () {
+  const config = {
+    apiBase: "${escJs(cfg.apiBase)}",
+    apiKey: "${escJs(cfg.apiKey)}",
+    pdfId: "${escJs(cfg.pdfId)}",
+    companyName: "${escJs(cfg.companyName)}",
+    title: "${escJs(cfg.widgetTitle)}",
+    model: "${escJs(cfg.model)}",
+    systemPrompt: \`${escJs(cfg.systemPrompt)}\`,
+    accent: "${escJs(cfg.accent)}"
+  };
+
+  const sessionId = (window.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : 'sess_' + Math.random().toString(36).slice(2);
+
+  const root = document.getElementById('pdf-insights-chat-root');
+  if (!root) return;
+
+  root.innerHTML = \
+    '<div style="font-family:Arial,Helvetica,sans-serif;max-width:420px;border:1px solid #d9e2ff;border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.12);background:#fff">' +
+      '<div style="background:' + config.accent + ';color:#fff;padding:14px 16px">' +
+        '<div style="font-size:12px;opacity:.9">' + config.companyName + '</div>' +
+        '<div style="font-size:18px;font-weight:700;margin-top:2px">' + config.title + '</div>' +
+      '</div>' +
+      '<div id="piChatMessages" style="height:360px;overflow:auto;padding:14px;background:#f7f9ff"></div>' +
+      '<div style="border-top:1px solid #e8edff;padding:12px;background:#fff">' +
+        '<textarea id="piChatInput" placeholder="Ask a question about this document..." style="width:100%;height:86px;resize:vertical;padding:10px;border:1px solid #ccd7ff;border-radius:10px;font-size:14px"></textarea>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px">' +
+          '<div id="piChatStatus" style="font-size:12px;color:#5d6998"></div>' +
+          '<button id="piChatSend" style="background:' + config.accent + ';color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer">Send</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  const messages = root.querySelector('#piChatMessages');
+  const input = root.querySelector('#piChatInput');
+  const sendBtn = root.querySelector('#piChatSend');
+  const status = root.querySelector('#piChatStatus');
+
+  function addBubble(text, who) {
+    const wrap = document.createElement('div');
+    wrap.style.margin = '0 0 12px';
+    wrap.style.display = 'flex';
+    wrap.style.justifyContent = who === 'user' ? 'flex-end' : 'flex-start';
+
+    const bubble = document.createElement('div');
+    bubble.style.maxWidth = '85%';
+    bubble.style.padding = '10px 12px';
+    bubble.style.borderRadius = '12px';
+    bubble.style.whiteSpace = 'pre-wrap';
+    bubble.style.lineHeight = '1.45';
+    bubble.style.fontSize = '14px';
+    bubble.style.background = who === 'user' ? '#dce7ff' : '#ffffff';
+    bubble.style.border = '1px solid #d9e2ff';
+    bubble.textContent = text;
+
+    wrap.appendChild(bubble);
+    messages.appendChild(wrap);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const message = input.value.trim();
+    if (!message) return;
+    if (!config.apiKey || !config.pdfId) {
+      status.textContent = 'Missing API key or PDF ID.';
+      return;
+    }
+
+    addBubble(message, 'user');
+    input.value = '';
+    status.textContent = 'Thinking...';
+    sendBtn.disabled = true;
+
+    try {
+      const resp = await fetch(config.apiBase + '/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + config.apiKey
+        },
+        body: JSON.stringify({
+          session_id: sessionId,
+          pdf_id: config.pdfId,
+          message: message,
+          model: config.model,
+          system_prompt: config.systemPrompt
+        })
+      });
+
+      const data = await resp.json().catch(() => ({}));
+      if (!resp.ok) {
+        throw new Error(data.detail || data.error || ('Request failed: ' + resp.status));
+      }
+
+      addBubble(data.answer || '(No answer returned)', 'bot');
+      status.textContent = '';
+    } catch (err) {
+      addBubble('Error: ' + (err.message || err), 'bot');
+      status.textContent = 'Request failed.';
+    } finally {
+      sendBtn.disabled = false;
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') sendMessage();
+  });
+
+  addBubble('Hello. Ask a question about this document.', 'bot');
+})();
+<\/script>`;
+    }
+
+    function getConfig() {
+      return {
+        apiBase: document.getElementById('apiBase').value.trim(),
+        apiKey: document.getElementById('apiKey').value.trim(),
+        pdfId: document.getElementById('pdfId').value.trim(),
+        companyName: document.getElementById('companyName').value.trim(),
+        widgetTitle: document.getElementById('widgetTitle').value.trim(),
+        model: document.getElementById('model').value,
+        systemPrompt: document.getElementById('systemPrompt').value,
+        accent: document.getElementById('accent').value.trim() || '#4f8cff'
+      };
+    }
+
+    function render() {
+      const cfg = getConfig();
+      const snippet = buildSnippet(cfg);
+      document.getElementById('snippetBox').value = snippet;
+      document.getElementById('previewFrame').srcdoc = snippet;
+      document.getElementById('status').textContent = 'Snippet generated.';
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', render);
+    document.getElementById('previewBtn').addEventListener('click', render);
+    document.getElementById('copyBtn').addEventListener('click', async function () {
+      const box = document.getElementById('snippetBox');
+      box.select();
+      box.setSelectionRange(0, box.value.length);
+      try {
+        await navigator.clipboard.writeText(box.value);
+        document.getElementById('status').textContent = 'Snippet copied to clipboard.';
+      } catch {
+        document.getElementById('status').textContent = 'Copy failed. Select and copy manually.';
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
 
