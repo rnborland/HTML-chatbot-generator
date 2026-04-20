@@ -1,5 +1,7 @@
 # Build an AI Chatbot from Any PDF
 
+⚡ Build and deploy a PDF-powered chatbot in under 5 minutes.
+
 Create a working HTML chatbot for any PDF using the PDF-Insights.ai API.
 
 This example is designed for developers, agencies, and AI builders who want to turn a PDF into an embeddable chatbot quickly.
@@ -180,8 +182,14 @@ Open:
 ```markdown
 pdf_insights_embed_generator.html
 ```
+
 <img src="images/step_4.png" width="700">
+
+*Example: Generator interface ready for input*
+
+
 ## Step 5 — Enter Your Settings
+
 API Key
 PDF ID
 Company Name
@@ -197,3 +205,5 @@ Paste into your website or HTML page.
 
 
 <img src="images/step_6.png" width="500">
+
+*Chat Engine Embedded in your website*
