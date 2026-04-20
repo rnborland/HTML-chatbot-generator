@@ -159,7 +159,8 @@ Place your PDF in the same folder as the script and rename it:
 
 example.pdf
 
-Or change this line:
+Or change these lines:
+
 ```markdown
 with open("example.pdf", "rb") as f:
 ```
@@ -167,7 +168,12 @@ Example:
 ```markdown
 with open("my_catalog.pdf", "rb") as f:
 ```
+and
 
+```markdown
+files={"file": ("my_catalog.pdf", f, "application/pdf")}
+```
+for a file named my_catalog.pdf
 
 Run it
 
