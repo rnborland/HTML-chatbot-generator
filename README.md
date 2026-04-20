@@ -59,6 +59,8 @@ Every account includes free trial credit, so you can test the API before spendin
 
 ---
 
+
+
 ## Step 2 — Create an API Key
 
 After logging in:
@@ -70,7 +72,7 @@ After logging in:
 
 Your key will look like:
 
-```text
+
 pdi_live_xxxxxxxxxxxxxxxxxxxxxxxxx
 
 Save it somewhere safe.
@@ -87,6 +89,7 @@ pip install requests
 Example script
 
 Save this as upload_and_test_pdf.py:
+```markdown
 
 import requests
 import uuid
@@ -145,6 +148,9 @@ chat_data = chat_resp.json()
 
 print("\nChat response:")
 print(chat_data.get("answer", chat_data))
+
+```
+
 Using your own PDF
 
 Place your PDF in the same folder as the script and rename it:
@@ -155,7 +161,7 @@ Or change this line:
 
 with open("example.pdf", "rb") as f:
 
-For example:
+Example:
 
 with open("my_catalog.pdf", "rb") as f:
 Run it
@@ -163,192 +169,21 @@ python upload_and_test_pdf.py
 
 The script will print your pdf_id.
 
-Copy it for the next step.
-
 Step 4 — Open the HTML Chatbot Generator
 
-Open this file in your browser:
+Open:
 
 pdf_insights_embed_generator.html
-
-No backend is required for the demo version.
-
 Step 5 — Enter Your Settings
-
-In the generator, enter:
-
-PDF-Insights API Key
+API Key
 PDF ID
 Company Name
 Chat Title
-Model (gpt-4o-mini is a good default)
-Personality / System Prompt
-optional accent color
+Model
+System Prompt
 
-Then click:
-
-Generate Snippet
+Click Generate Snippet
 
 Step 6 — Copy the HTML Snippet
 
-The generator will create an embeddable HTML chatbot snippet.
-
-Copy it and paste it into:
-
-a standalone HTML page
-a website page
-a landing page
-a customer portal
-an internal tool
-Example Use Cases
-
-This example is intentionally generic.
-
-You can adapt it for:
-
-Sales assistant — answer questions from a catalog and recommend products
-Customer support bot — answer questions from manuals or documentation
-Training assistant — help users learn from procedures or guides
-Document Q&A widget — embed a chatbot on top of any PDF-driven knowledge base
-Why This Is Useful
-
-Instead of asking users to:
-
-search large PDFs
-read long manuals
-browse document sections manually
-
-you can let them:
-
-👉 ask natural-language questions and get direct answers
-
-Demo Mode vs Production Mode
-Demo Mode
-
-The generator can place the API key directly in the generated HTML snippet.
-
-This is fine for:
-
-local testing
-proof of concept work
-quick demos
-Production Mode
-
-For a real deployment, do not expose your API key in browser code.
-
-Instead:
-
-store the API key on your server as an environment variable
-create a small proxy endpoint on your server
-have the browser call your proxy instead of calling PDF-Insights directly
-
-That way the browser never sees the real API key.
-
-Recommended Secure Pattern
-Store the API key on the server
-
-Example environment variable:
-
-PDF_INSIGHTS_API_KEY=pdi_live_xxxxxxxxxxxxxxxxx
-Create a small proxy endpoint
-
-The browser sends:
-
-session_id
-pdf_id
-message
-model
-system_prompt
-
-Your server:
-
-reads the API key from the environment
-forwards the request to PDF-Insights /chat
-returns the answer
-Request flow
-Browser widget
-   ↓
-Your server-side proxy
-   ↓
-PDF-Insights /chat
-   ↓
-Answer returned to browser
-Example Proxy (FastAPI)
-
-Save this as proxy_example_fastapi.py:
-
-from fastapi import FastAPI
-from pydantic import BaseModel
-import os
-import requests
-
-app = FastAPI()
-
-PDF_INSIGHTS_API_KEY = os.getenv("PDF_INSIGHTS_API_KEY")
-BASE_URL = "https://users.pdf-insights.ai"
-
-class ChatIn(BaseModel):
-    session_id: str
-    pdf_id: str
-    message: str
-    model: str = "gpt-4o-mini"
-    system_prompt: str = ""
-
-@app.post("/chat-proxy")
-def chat_proxy(body: ChatIn):
-    resp = requests.post(
-        f"{BASE_URL}/chat",
-        headers={
-            "Authorization": f"Bearer {PDF_INSIGHTS_API_KEY}",
-            "Content-Type": "application/json"
-        },
-        json=body.model_dump(),
-        timeout=180
-    )
-    return resp.json()
-How to use the proxy
-
-In production, instead of calling:
-
-https://users.pdf-insights.ai/chat
-
-from the browser, your chatbot widget should call:
-
-/chat-proxy
-
-on your own server.
-
-The API key stays hidden on the server.
-
-Repo Files
-
-Suggested files for this repo:
-
-README.md
-pdf_insights_embed_generator.html
-proxy_example_fastapi.py
-
-Optional helper file:
-
-upload_and_test_pdf.py
-Positioning
-
-This is not just a chatbot demo.
-
-It is a fast way for developers and AI builders to:
-
-create document-based agents
-embed them on websites
-test ideas quickly
-turn PDFs into usable interfaces
-Summary
-
-With this example, you can:
-
-upload a PDF
-get a pdf_id
-generate a branded chatbot
-embed it in a website
-hide the API key later with a simple proxy
-
-👉 A fast path to creating your own PDF-based AI agent
+Paste into your website or HTML page.
