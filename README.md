@@ -158,22 +158,29 @@ Place your PDF in the same folder as the script and rename it:
 example.pdf
 
 Or change this line:
-
+```markdown
 with open("example.pdf", "rb") as f:
-
+```
 Example:
-
+```markdown
 with open("my_catalog.pdf", "rb") as f:
-Run it
-python upload_and_test_pdf.py
+```
 
+
+Run it
+
+```markdown
+python upload_and_test_pdf.py
+```
 The script will print your pdf_id.
 
 Step 4 — Open the HTML Chatbot Generator
 
 Open:
-
+```markdown
 pdf_insights_embed_generator.html
+```
+
 Step 5 — Enter Your Settings
 API Key
 PDF ID
