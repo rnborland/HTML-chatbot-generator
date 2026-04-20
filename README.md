@@ -203,11 +203,17 @@ pdf_insights_embed_generator.html
 ## Step 5 — Enter Your Settings
 
 API Key
+
 PDF ID
+
 Company Name
+
 Chat Title
+
 Model
+
 System Prompt
+
 
 Click Generate Snippet
 
