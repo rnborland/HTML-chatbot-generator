@@ -77,7 +77,7 @@ pdi_live_xxxxxxxxxxxxxxxxxxxxxxxxx
 
 Save it somewhere safe.
 
-Step 3 — Upload Your PDF and Get pdf_id
+## Step 3 — Upload Your PDF and Get pdf_id
 
 Use the Python script below to:
 
@@ -174,14 +174,14 @@ python upload_and_test_pdf.py
 ```
 The script will print your pdf_id.
 
-Step 4 — Open the HTML Chatbot Generator
+## Step 4 — Open the HTML Chatbot Generator
 
 Open:
 ```markdown
 pdf_insights_embed_generator.html
 ```
 
-Step 5 — Enter Your Settings
+## Step 5 — Enter Your Settings
 API Key
 PDF ID
 Company Name
@@ -191,6 +191,6 @@ System Prompt
 
 Click Generate Snippet
 
-Step 6 — Copy the HTML Snippet
+## Step 6 — Copy the HTML Snippet
 
 Paste into your website or HTML page.
