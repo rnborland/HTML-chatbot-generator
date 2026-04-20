@@ -153,27 +153,33 @@ print(chat_data.get("answer", chat_data))
 
 ```
 
-Using your own PDF
+## Using Your Own PDF
 
 Place your PDF in the same folder as the script and rename it:
 
+```text
 example.pdf
-
-Or change these lines:
-
+```
+Or update both of these lines in the script:
 ```markdown
 with open("example.pdf", "rb") as f:
+files={"file": ("example.pdf", f, "application/pdf")}
 ```
-Example:
+Example
+
+If your file is named:
+
+my_catalog.pdf
+
+Update the section of code to:
 ```markdown
 with open("my_catalog.pdf", "rb") as f:
+    upload_resp = requests.post(
+        f"{BASE_URL}/pdf/upload",
+        headers=headers,
+        files={"file": ("my_catalog.pdf", f, "application/pdf")}
 ```
-and
 
-```markdown
-files={"file": ("my_catalog.pdf", f, "application/pdf")}
-```
-for a file named my_catalog.pdf
 
 Run it
 
