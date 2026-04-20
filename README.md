@@ -180,7 +180,7 @@ Open:
 ```markdown
 pdf_insights_embed_generator.html
 ```
-
+<img src="images/step_4.png" width="700">
 ## Step 5 — Enter Your Settings
 API Key
 PDF ID
@@ -194,3 +194,6 @@ Click Generate Snippet
 ## Step 6 — Copy the HTML Snippet
 
 Paste into your website or HTML page.
+
+
+<img src="images/step_6.png" width="500">
